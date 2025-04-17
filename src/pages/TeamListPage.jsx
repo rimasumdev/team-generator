@@ -14,8 +14,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Modal from "../components/Modal";
 
-const SERVER_IP = import.meta.env.VITE_SERVER_IP || "localhost";
-const API_URL = `http://${SERVER_IP}:5000/api`;
+const SERVER_IP = import.meta.env.VITE_SERVER_IP;
+const API_URL = `${SERVER_IP}/api`;
 
 const pageVariants = {
   initial: { opacity: 0 },

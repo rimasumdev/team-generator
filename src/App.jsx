@@ -10,8 +10,8 @@ import StatsPage from "./pages/StatsPage";
 import TeamListPage from "./pages/TeamListPage";
 import Navbar from "./components/Navbar";
 
-const SERVER_IP = import.meta.env.VITE_SERVER_IP || "localhost";
-const API_URL = `http://${SERVER_IP}:5000/api`;
+const SERVER_IP = import.meta.env.VITE_SERVER_IP;
+const API_URL = `${SERVER_IP}/api`;
 
 function App() {
   const [players, setPlayers] = useState([]);
