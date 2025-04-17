@@ -66,12 +66,12 @@ const PlayerList = ({
         {selectedPlayer && (
           <PlayerForm
             onAddPlayer={(updatedData) => {
-              onEditPlayer(selectedPlayer.id, updatedData);
+              onEditPlayer(selectedPlayer._id, updatedData);
               setIsEditModalOpen(false);
               setSelectedPlayer(null);
             }}
             setIsModalOpen={setIsEditModalOpen}
-            players={players.filter((p) => p.id !== selectedPlayer.id)}
+            players={players.filter((p) => p._id !== selectedPlayer._id)}
             initialData={selectedPlayer}
           />
         )}
@@ -107,7 +107,7 @@ const PlayerList = ({
               </button>
               <button
                 onClick={() => {
-                  onDeletePlayer(selectedPlayer.id);
+                  onDeletePlayer(selectedPlayer._id);
                   setIsDeleteModalOpen(false);
                   setSelectedPlayer(null);
                 }}
@@ -165,8 +165,8 @@ const PlayerList = ({
                   });
                   return;
                 }
-                onToggleCaptain(selectedPlayer.id);
-                onSetTeamName(selectedPlayer.id, teamName.trim());
+                onToggleCaptain(selectedPlayer._id);
+                onSetTeamName(selectedPlayer._id, teamName.trim());
                 toast.success("ক্যাপ্টেন সফলভাবে নির্বাচন করা হয়েছে!", {
                   position: "top-right",
                   autoClose: 3000,
@@ -237,7 +237,7 @@ const PlayerList = ({
               <tbody className="divide-y divide-gray-200">
                 {players.map((player) => (
                   <tr
-                    key={player.id}
+                    key={player._id}
                     className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
                   >
                     <td className="px-2 sm:px-4 py-2 sm:py-3">
@@ -262,7 +262,7 @@ const PlayerList = ({
                             setTeamName("");
                             setIsTeamNameModalOpen(true);
                           } else {
-                            onToggleCaptain(player.id);
+                            onToggleCaptain(player._id);
                           }
                         }}
                         className={`p-1 sm:p-2 rounded-full transition-colors ${

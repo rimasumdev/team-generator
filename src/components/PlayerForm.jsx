@@ -33,7 +33,7 @@ const PlayerForm = ({ onAddPlayer, setIsModalOpen, players, initialData }) => {
       return;
     }
 
-    onAddPlayer({ ...playerData, id: Date.now() });
+    onAddPlayer(playerData);
     setPlayerData({ name: "", position: "Striker", isCaptain: false });
     setIsModalOpen(false);
   };

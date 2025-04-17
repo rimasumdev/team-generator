@@ -1,22 +1,19 @@
 import { useState } from "react";
-import { FaUsers, FaRandom, FaExclamationCircle } from "react-icons/fa";
+import { FaUsers, FaRandom, FaExclamationCircle, FaSave } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
 import EmptyState from "./EmptyState";
 import Modal from "./Modal";
+
+const SERVER_IP = import.meta.env.VITE_SERVER_IP || "localhost";
+const API_URL = `http://${SERVER_IP}:5000/api`;
 
 const TeamGenerator = ({ players }) => {
   const navigate = useNavigate();
   const [numberOfTeams, setNumberOfTeams] = useState(2);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [teams, setTeams] = useState(() => {
-    try {
-      const savedTeams = localStorage.getItem("teamplay_teams");
-      return savedTeams ? JSON.parse(savedTeams) : null;
-    } catch (error) {
-      console.error("Error loading teams:", error);
-      return null;
-    }
-  });
+  const [teams, setTeams] = useState(null);
 
   const getPositionColor = (position) => {
     const colors = {
@@ -26,6 +23,16 @@ const TeamGenerator = ({ players }) => {
       Goalkeeper: "text-yellow-500",
     };
     return colors[position] || "text-gray-500";
+  };
+
+  const saveTeams = async (generatedTeams) => {
+    try {
+      await axios.post(`${API_URL}/teams`, generatedTeams);
+      toast.success("টিমগুলো সফলভাবে সংরক্ষণ করা হয়েছে!");
+    } catch (error) {
+      toast.error("টিমগুলো সংরক্ষণ করতে সমস্যা হয়েছে!");
+      console.error("Error saving teams:", error);
+    }
   };
 
   if (!players || players.length === 0) {
@@ -75,11 +82,8 @@ const TeamGenerator = ({ players }) => {
     });
 
     setTeams(generatedTeams);
-    try {
-      localStorage.setItem("teamplay_teams", JSON.stringify(generatedTeams));
-    } catch (error) {
-      console.error("Error saving teams:", error);
-    }
+    // Auto-save the generated teams
+    saveTeams(generatedTeams);
   };
 
   const convertToBengaliNumber = (number) => {
@@ -173,11 +177,17 @@ const TeamGenerator = ({ players }) => {
 
         {teams && (
           <div className="space-y-4">
-            <div className="flex items-center justify-center gap-2 bg-white p-4 rounded-lg shadow-md">
-              {/* <FaUsers className="text-blue-500 text-2xl" /> */}
+            <div className="flex items-center justify-between gap-2 bg-white p-4 rounded-lg shadow-md">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
                 টিমসমূহ
               </h2>
+              <button
+                onClick={() => saveTeams(teams)}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 flex items-center gap-2"
+              >
+                <FaSave />
+                টিমগুলো সংরক্ষণ করুন
+              </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6">
               {teams.map((team, index) => (
@@ -242,10 +252,10 @@ const TeamGenerator = ({ players }) => {
                           </td>
                         </tr>
                         {team.players
-                          .filter((p) => p.id !== team.captain.id)
+                          .filter((p) => p._id !== team.captain._id)
                           .map((player, playerIndex) => (
                             <tr
-                              key={player.id}
+                              key={player._id}
                               className="hover:bg-gray-50 transition-colors duration-150"
                             >
                               <td className="px-3 py-2.5">

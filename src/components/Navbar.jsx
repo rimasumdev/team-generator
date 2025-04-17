@@ -14,6 +14,7 @@ const Navbar = () => {
     { to: "/", icon: <FaUserAlt />, text: "খেলোয়াড়দের তালিকা" },
     { to: "/stats", icon: <FaUserAlt />, text: "খেলোয়াড়দের পরিসংখ্যান" },
     { to: "/team-generator", icon: <FaUsers />, text: "টিম তৈরি করুন" },
+    { to: "/teams", icon: <FaUsers />, text: "তৈরি করা টিমসমূহ" },
   ];
 
   return (
